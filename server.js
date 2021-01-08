@@ -11,9 +11,11 @@ app.use(express.json());
 app.use(cors());
 app.use('/messages', messageRouter);
 
+const uri = process.env.MONGODB_URI;
+
 const connectionUrl = 'mongodb+srv://admin:221bakerstreet@cluster0.lvtxl.mongodb.net/whatsappdb?retryWrites=true&w=majority';
 
-mongoose.connect(connectionUrl, {
+mongoose.connect(uri, {
   useCreateIndex: true, 
   useNewUrlParser: true,
   useUnifiedTopology: true

@@ -5,7 +5,7 @@ const pusher = require('./services/pusher');
 const cors = require('cors');
 
 const app = express();
-const port = process.env.PORT || 9000;
+const port = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(cors());
@@ -15,7 +15,7 @@ const uri = process.env.MONGODB_URI;
 
 const connectionUrl = 'mongodb+srv://admin:221bakerstreet@cluster0.lvtxl.mongodb.net/whatsappdb?retryWrites=true&w=majority';
 
-mongoose.connect(uri, {
+mongoose.connect(connectionUrl, {
   useCreateIndex: true, 
   useNewUrlParser: true,
   useUnifiedTopology: true
@@ -36,8 +36,10 @@ db.once('open', () => {
       const messageDetails = change.fullDocument;
       pusher.trigger('messages', 'inserted',
         {
-          user: messageDetails.name,
-          message:messageDetails.message
+          name: messageDetails.name,
+          message:messageDetails.message,
+          timestamp:messageDetails.timestamp,
+          received:messageDetails.received
         }
       );
     }else{
